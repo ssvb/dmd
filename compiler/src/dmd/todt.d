@@ -180,7 +180,7 @@ extern (C++) void Initializer_toDt(Initializer init, ref DtBuilder dtb, bool isC
             {
                 if (tb.ty == Tarray)
                     dtb.size(ai.dim);
-                Symbol* s = dtb.dtoff(dtbarray.finish(), 0);
+                Symbol* s = dtb.dtoff(dtbarray.finish(), 0, tb.isImmutable());
                 if (tn.isMutable())
                     foreach (i; 0 .. ai.dim)
                         write_pointers(tn, s, size * cast(int)i);
@@ -477,7 +477,7 @@ extern (C++) void Expression_toDt(Expression e, ref DtBuilder dtb)
             case Tpointer:
             {
                 if (auto d = dtbarray.finish())
-                    dtb.dtoff(d, 0);
+                    dtb.dtoff(d, 0, t.isImmutable());
                 else
                     dtb.size(0);
 
@@ -1610,7 +1610,7 @@ private extern (C++) class TypeInfoDtVisitor : Visitor
             dtbargs.xoff(s, 0);
         }
 
-        dtb.dtoff(dtbargs.finish(), 0);                  // elements.ptr
+        dtb.dtoff(dtbargs.finish(), 0, false); // elements.ptr
     }
 }
 

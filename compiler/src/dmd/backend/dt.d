@@ -443,7 +443,7 @@ nothrow:
      * Returns: the internal symbol used for the other dt
      */
     @trusted
-    Symbol *dtoff(dt_t *dt, uint offset)
+    Symbol *dtoff(dt_t *dt, uint offset, bool read_only)
     {
         type *t = type_alloc(TYint);
         t.Tcount++;
@@ -453,6 +453,8 @@ nothrow:
         s.Sflags |= SFLnodebug;
         s.Stype = t;
         s.Sdt = dt;
+        if (read_only)
+            out_readonly(s);
         outdata(s);
 
         xoff(s, offset);
